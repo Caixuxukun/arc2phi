@@ -16,13 +16,13 @@ def so(pos):
 def b(pos):
     return (1 - cos(pos * pi)) / 2
 def adjustScale(t):
-    global scale
+    global scale,x
     for enwiden,i in zip(enwidenList,range(len(enwidenList))):
         endTime = enwidenList[i+1][0] if i+1 < len(enwidenList) else 1e9
         if int(t) < enwiden[0]: break
         if int(t) > endTime: continue
         if enwiden[1]:
-            scale = 325
+            scale = 375
             x = ['-750','-450','-150','150','450','750']
         else:
             scale = 600
@@ -80,9 +80,14 @@ for line in lines:
             for time in range(t1,t2,int((30000 if float(BPM) < 255 else 60000)/float(BPM))):
                 adjustScale(time)
                 outChart += 'n4 0 ' + str(time/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 0\n# 10000.0\n& 1.0\n'
-            for time in range(t1,t2,50):
+            f = False
+            if t1 == t2:
+                t2 += 5
+                r, f = range(t1,t2), True
+            else: r = range(t1,t2,50)
+            for time in r:
                 adjustScale(time)
-                outChart += 'n4 0 ' + str(time/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
+                outChart += 'n4 0 ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
         if '[' in line:
             for arctap in line[line.index('[')+1:line.index(']')].split(','):
                 adjustScale(arctap[7:-1])
@@ -138,9 +143,14 @@ for timingGroup in timingGroups:
                 for time in range(t1,t2,int((30000 if float(BPM) < 255 else 60000)/float(BPM))):
                     adjustScale(time)
                     judgeLine += 'n4 ' + str(cnt) + ' ' + str(time/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 ' + ('1\n# 10000.0\n& 1.0\n' if timingGroup[0] == 'noinput' else '0\n# 10000.0\n& 1.0\n')
-                for time in range(t1,t2,50):
+                f = False
+                if t1 == t2:
+                    t2 += 5
+                    r, f = range(t1,t2), True
+                else: r = range(t1,t2,50)
+                for time in r:
                     adjustScale(time)
-                    judgeLine += 'n4 ' + str(cnt) + ' ' + str(time/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
+                    judgeLine += 'n4 ' + str(cnt) + ' ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
             if '[' in line:
                 for arctap in line[line.index('[')+1:line.index(']')].split(','):
                     adjustScale(arctap[7:-1])
