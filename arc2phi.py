@@ -62,7 +62,7 @@ for line in lines:
         if float(BPM) > 60000: BPM = 60000
         for time in range(int(t1),int(t2),int((30000 if float(BPM) < 255 else 60000)/float(BPM))):
             adjustScale(time)
-            outChart += 'n4 0 ' + str(time/500) + ' ' + x[int(lane)] + ' 1 0\n# 10000.0\n& 1.0\n'
+            if time != int(t1): outChart += 'n4 0 ' + str(time/500) + ' ' + x[int(lane)] + ' 1 0\n# 10000.0\n& 1.0\n'
     elif 'arc' in line:
         t1,t2,x1,x2,slideeasing,y1,y2,color,FX,skylineBoolean = line[4:line.index(')')].split(',')
         t1,t2 = int(t1),int(t2)
@@ -125,7 +125,7 @@ for timingGroup in timingGroups:
             if float(BPM) > 60000: BPM = 60000
             for time in range(int(t1),int(t2),int((30000 if float(BPM) < 255 else 60000)/float(BPM))):
                 adjustScale(time)
-                judgeLine += 'n4 ' + str(cnt) + ' ' + str(time/500) + ' ' + x[int(lane)] + (' 1 1\n# 10000.0\n& 1.0\n' if timingGroup[0] == 'noinput' else ' 1 0\n# 10000.0\n& 1.0\n')
+                if time != int(t1): judgeLine += 'n4 ' + str(cnt) + ' ' + str(time/500) + ' ' + x[int(lane)] + (' 1 1\n# 10000.0\n& 1.0\n' if timingGroup[0] == 'noinput' else ' 1 0\n# 10000.0\n& 1.0\n')
         elif 'arc' in line:
             t1,t2,x1,x2,slideeasing,y1,y2,color,FX,skylineBoolean = line[4:line.index(')')].split(',')
             t1,t2 = int(t1),int(t2)
