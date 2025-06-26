@@ -8,7 +8,7 @@ lines = []
 timingGroupArg = None
 cnt = 0
 x = ['-1000.0','-600.0','-200.0','200.0','600.0','1000.0']
-scale = 600
+scale = 480
 def si(pos):
     return 1 - cos(pos * pi / 2)
 def so(pos):
@@ -22,10 +22,10 @@ def adjustScale(t):
         if int(t) < enwiden[0]: break
         if int(t) > endTime: continue
         if enwiden[1]:
-            scale = 375
+            scale = 3000 / 7
             x = ['-750','-450','-150','150','450','750']
         else:
-            scale = 600
+            scale = 480
             x = ['-1000','-600','-200','200','600','1000']
 for line in chart:
     if 'enwiden' in line:
@@ -70,24 +70,26 @@ for line in lines:
         elif slideeasing[:2] == 'si': progress = lambda time: si((time-t1)/(t2-t1))
         elif slideeasing[:2] == 'so': progress = lambda time: so((time-t1)/(t2-t1))
         elif slideeasing == 'b': progress = lambda time: b((time-t1)/(t2-t1))
+        for time,i in zip(BPMList,range(len(BPMList))):
+            endTime = BPMList[i+1][0] if i+1 < len(BPMList) else 1e9
+            if t1 < time[0]: break
+            if t1 > endTime: continue
+            BPM = time[1]
+        if float(BPM) > 60000: BPM = 60000
         if skylineBoolean == 'false':
-            for time,i in zip(BPMList,range(len(BPMList))):
-                endTime = BPMList[i+1][0] if i+1 < len(BPMList) else 1e9
-                if t1 < time[0]: break
-                if t1 > endTime: continue
-                BPM = time[1]
-            if float(BPM) > 60000: BPM = 60000
             for time in range(t1,t2,int((30000 if float(BPM) < 255 else 60000)/float(BPM))):
                 adjustScale(time)
                 outChart += 'n4 0 ' + str(time/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 0\n# 10000.0\n& 1.0\n'
-            f = False
-            if t1 == t2:
-                t2 += 5
-                r, f = range(t1,t2), True
-            else: r = range(t1,t2,50)
-            for time in r:
-                adjustScale(time)
-                outChart += 'n4 0 ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
+        f = False
+        if t1 == t2:
+            t2 += 5 if skylineBoolean == 'false' else 10
+            r, f = range(t1,t2), True
+        else: r = range(t1,t2,50) if skylineBoolean == 'false' else range(t1,t2,20)
+        for time in r:
+            adjustScale(time)
+            if skylineBoolean == 'false': outChart += 'n4 0 ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
+            elif 'designant' in line: outChart += 'n3 0 ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 0.1\n'
+            else: outChart += 'n2 0 ' + str((t1 if f else time)/500) + ' ' + str((t1 if f else time)/500+0.01) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 0.1\n'
         if '[' in line:
             for arctap in line[line.index('[')+1:line.index(']')].split(','):
                 adjustScale(arctap[7:-1])
@@ -133,30 +135,35 @@ for timingGroup in timingGroups:
             elif slideeasing[:2] == 'si': progress = lambda time: si((time-t1)/(t2-t1))
             elif slideeasing[:2] == 'so': progress = lambda time: so((time-t1)/(t2-t1))
             elif slideeasing == 'b': progress = lambda time: b((time-t1)/(t2-t1))
+            for time,i in zip(BPMList,range(len(BPMList))):
+                endTime = BPMList[i+1][0] if i+1 < len(BPMList) else 1e9
+                if t1 < time[0]: break
+                if t1 > endTime: continue
+                BPM = time[1]
+            if float(BPM) > 60000: BPM = 60000
             if skylineBoolean == 'false':
-                for time,i in zip(BPMList,range(len(BPMList))):
-                    endTime = BPMList[i+1][0] if i+1 < len(BPMList) else 1e9
-                    if t1 < time[0]: break
-                    if t1 > endTime: continue
-                    BPM = time[1]
-                if float(BPM) > 60000: BPM = 60000
                 for time in range(t1,t2,int((30000 if float(BPM) < 255 else 60000)/float(BPM))):
                     adjustScale(time)
                     judgeLine += 'n4 ' + str(cnt) + ' ' + str(time/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 ' + ('1\n# 10000.0\n& 1.0\n' if timingGroup[0] == 'noinput' else '0\n# 10000.0\n& 1.0\n')
-                f = False
-                if t1 == t2:
-                    t2 += 5
-                    r, f = range(t1,t2), True
-                else: r = range(t1,t2,50)
-                for time in r:
-                    adjustScale(time)
-                    judgeLine += 'n4 ' + str(cnt) + ' ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
+            f = False
+            if t1 == t2:
+                t2 += 5 if skylineBoolean == 'false' else 10
+                r, f = range(t1,t2), True
+            else: r = range(t1,t2,50) if skylineBoolean == 'false' else range(t1,t2,20)
+            for time in r:
+                adjustScale(time)
+                if skylineBoolean == 'false': judgeLine += 'n4 ' + str(cnt) + ' ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
+                elif 'designant' in line: judgeLine += 'n3 ' + str(cnt) + ' ' + str((t1 if f else time)/500) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 0.1\n'
+                else: judgeLine += 'n2 ' + str(cnt) + ' ' + str((t1 if f else time)/500) + ' ' + str((t1 if f else time)/500+0.01) + ' ' + str((float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 0.1\n'
             if '[' in line:
                 for arctap in line[line.index('[')+1:line.index(']')].split(','):
                     adjustScale(arctap[7:-1])
                     if 'designant' in line: judgeLine += 'n3 ' + str(cnt) + ' ' + str(float(arctap[7:-1])/500) + ' ' + str((float(x1)+progress(int(arctap[7:-1]))*(float(x2)-float(x1))-0.5)*scale) + ' 1 1\n# 1.0\n& 1.0\n'
                     judgeLine += 'n1 ' + str(cnt) + ' ' + str(float(arctap[7:-1])/500) + ' ' + str((float(x1)+progress(int(arctap[7:-1]))*(float(x2)-float(x1))-0.5)*scale) + ' 1 ' + ('1\n# 1.0\n& 1.0\n' if timingGroup[0] == 'noinput' else '0\n# 1.0\n& 1.0\n')
-        elif 'scenecontrol' in line: pass
+        elif 'scenecontrol' in line:
+            if 'hidegroup' in line:
+                t,hidegroup,x,typ = line[13:-3].split(',')
+                judgeLine += 'cp ' + str(cnt) + ' ' + str(float(t)/500) + (' 1024.0 300.0\n' if not int(typ) else ' 1024.0 2300.0\n')
         elif 'camera' in line: pass
         else:
             t1,lane = line[1:-3].split(',')
