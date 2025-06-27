@@ -8,7 +8,7 @@ lines = []
 timingGroupArg = None
 cnt = 0
 x = ['-1000.0','-600.0','-200.0','200.0','600.0','1000.0']
-scale = 480
+scale = 400
 def si(pos):
     return 1 - cos(pos * pi / 2)
 def so(pos):
@@ -22,10 +22,10 @@ def adjustScale(t):
         if int(t) < enwiden[0]: break
         if int(t) > endTime: continue
         if enwiden[1]:
-            scale = 3000 / 7
+            scale = 600
             x = ['-750','-450','-150','150','450','750']
         else:
-            scale = 480
+            scale = 800
             x = ['-1000','-600','-200','200','600','1000']
 for line in chart:
     if 'enwiden' in line:
