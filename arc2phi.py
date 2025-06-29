@@ -2,7 +2,7 @@ from math import sin,cos,pi
 from fractions import Fraction
 import json
 with open('chart.aff','r') as f: chart = f.readlines()
-outChart = {'META':{'RPEVersion':150,'offset':int(chart[0][12:]),'name':None,'id':None,'song':None,'background':None,'background':None,'charter':None,'level':None},'BPMList':[{'startTime':[0,0,1],'bpm':120.0}],'judgeLineList':[{'numOfNotes':0,'isCover':1,'Texture':'line.png','eventLayers':[{'speedEvents':[],'moveXEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'moveYEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':-300.0,'end':-300.0,'easingType':1}],'rotateEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'alphaEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':255.0,'end':255.0,'easingType':1}]}],'notes':[],'Name':'Untitled'}]}
+outChart = {'META':{'RPEVersion':150,'offset':int(chart[0][12:]),'name':None,'id':None,'song':None,'background':None,'background':None,'charter':None,'level':None},'BPMList':[{'startTime':[0,0,1],'bpm':120.0}],'judgeLineList':[{'numOfNotes':0,'isCover':1,'Texture':'line.png','eventLayers':[{'speedEvents':[],'moveXEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'moveYEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':-300.0,'end':-300.0,'easingType':1}],'rotateEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'alphaEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':255.0,'end':255.0,'easingType':1}]}],'notes':[],'Name':'Untitled','bpmfactor':1.0}]}
 chart = chart[2:]
 numOfNotes = 0
 def note(typ,startTime,endTime,positionX,isFake,speed=1.0,size=1.0,alpha=255):
@@ -113,7 +113,7 @@ for line in lines:
     outChart['judgeLineList'][0]['numOfNotes'] = numOfNotes
 cnt = 1
 for timingGroup in timingGroups:
-    outChart['judgeLineList'].append({'numOfNotes':0,'isCover':1,'Texture':'line.png','eventLayers':[{'speedEvents':[],'moveXEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'moveYEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':-300.0,'end':-300.0,'easingType':1}],'rotateEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'alphaEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':255.0,'end':255.0,'easingType':1}]}],'notes':[],'Name':'Untitled'})
+    outChart['judgeLineList'].append({'numOfNotes':0,'isCover':1,'Texture':'line.png','eventLayers':[{'speedEvents':[],'moveXEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'moveYEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':-300.0,'end':-300.0,'easingType':1}],'rotateEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':0.0,'end':0.0,'easingType':1}],'alphaEvents':[{'startTime':[0,0,1],'endTime':[0,0,1],'start':255.0,'end':255.0,'easingType':1}]}],'notes':[],'Name':'Untitled','bpmfactor':1.0})
     numOfNotes = 0
     BPMList = []
     lastOffset = -1
