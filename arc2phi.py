@@ -141,14 +141,14 @@ for line in lines:
             r, f = range(t1,t2), True
         else: r = range(t1,t2,50) if skylineBoolean == 'false' else range(t1,t2,20)
         for time in r:
-            adjustScale(time)
+            adjustScale(t1 if f else time)
             lineId = max(0,min(round((float(y1)+progress(time)*(float(y2)-float(y1)))/scaleY*30),30))
-            start1,BPM1,floorPos1 = find(time)
-            pos = floorPos1[lineId]+(time-start1)*(BPM1/15*(1-lineId/90)*1.8*120)+3000
+            start1,BPM1,floorPos1 = find(t1 if f else time)
+            pos = floorPos1[lineId]+((t1 if f else time)-start1)*(BPM1/15*(1-lineId/90)*1.8*120)+3000
             start2,BPM2,floorPos2 = find(pos,lineId=lineId)
-            if skylineBoolean == 'false': outChart['judgeLineList'][lineId]['notes'].append(note(4,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-time))
-            elif 'designant' in line: outChart['judgeLineList'][lineId]['notes'].append(note(3,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-time,alpha=128))
-            else: outChart['judgeLineList'][lineId]['notes'].append(note(2,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500+0.01),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-time,alpha=128))
+            if skylineBoolean == 'false': outChart['judgeLineList'][lineId]['notes'].append(note(4,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-(t1 if f else time)))
+            elif 'designant' in line: outChart['judgeLineList'][lineId]['notes'].append(note(3,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-(t1 if f else time),alpha=128))
+            else: outChart['judgeLineList'][lineId]['notes'].append(note(2,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500+0.01),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-(t1 if f else time),alpha=128))
         if '[' in line:
             for arctap in line[line.index('[')+1:line.index(']')].split(','):
                 adjustScale(arctap[7:-1])
@@ -246,14 +246,14 @@ for timingGroup in timingGroups:
                 r, f = range(t1,t2), True
             else: r = range(t1,t2,50) if skylineBoolean == 'false' else range(t1,t2,20)
             for time in r:
-                adjustScale(time)
+                adjustScale(t1 if f else time)
                 lineId = max(0,min(round((float(y1)+progress(time)*(float(y2)-float(y1)))/scaleY*30),30))
-                start1,BPM1,floorPos1 = find(time)
-                pos = floorPos1[lineId]+(time-start1)*(BPM1/15*(1-lineId/90)*1.8*120)+3000
+                start1,BPM1,floorPos1 = find(t1 if f else time)
+                pos = floorPos1[lineId]+((t1 if f else time)-start1)*(BPM1/15*(1-lineId/90)*1.8*120)+3000
                 start2,BPM2,floorPos2 = find(pos,lineId=lineId)
-                if skylineBoolean == 'false': outChart['judgeLineList'][cnt+lineId]['notes'].append(note(4,RPETime(time/500),RPETime(time/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-time))
-                elif 'designant' in line: outChart['judgeLineList'][cnt+lineId]['notes'].append(note(3,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-time,alpha=128))
-                else: outChart['judgeLineList'][cnt+lineId]['notes'].append(note(2,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500+0.01),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-time,alpha=128))
+                if skylineBoolean == 'false': outChart['judgeLineList'][cnt+lineId]['notes'].append(note(4,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-(t1 if f else time)))
+                elif 'designant' in line: outChart['judgeLineList'][cnt+lineId]['notes'].append(note(3,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-(t1 if f else time),alpha=128))
+                else: outChart['judgeLineList'][cnt+lineId]['notes'].append(note(2,RPETime((t1 if f else time)/500),RPETime((t1 if f else time)/500+0.01),(float(x1)+progress(time)*(float(x2)-float(x1))-0.5)*scaleX,1,size=0.1,visibleTime=start2+(pos-floorPos2[lineId])/(BPM2/15*(1-lineId/90)*1.8*120)-(t1 if f else time),alpha=128))
             if '[' in line:
                 for arctap in line[line.index('[')+1:line.index(']')].split(','):
                     adjustScale(arctap[7:-1])
